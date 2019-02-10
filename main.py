@@ -140,9 +140,11 @@ def storeAnswer():
     return response
 
 
-@app.route('/download/<path:filename>', methods=['GET', 'POST'])
+@app.route('/download/<path:filename>', methods=['GET'])
 def download(filename):
     downloads = os.path.join(app.root_path, constants.downloads_dir)
+    logger.info('downloads directory: %s', downloads)
+    logger.info('filename: %s', filename)
     return send_from_directory(directory=downloads, filename=filename)
 
 
@@ -161,7 +163,7 @@ def done():
                             }''' % (str(today), patientId)
     response = call_db(query_date)
     logger.info('Response %s', response)
-
+    response = response['Answers']
     score = sum_scores(response)
 
     generate_report(patientId, score)

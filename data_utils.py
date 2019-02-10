@@ -36,13 +36,15 @@ def augment_question_with_voice(question):
     logger.info('Augmenting question: %s', question['text'])
     speech = generate_speech(question['text'])
     # logger.info('speach %s', str(speech))
+    number = random.randint(0, 10000000000)
+    filename = '{}.mp3'.format(str(number))
 
-    with open(os.path.join(constants.downloads_dir, 'speech.mp3'), 'wb') as out:
+    with open(os.path.join(constants.downloads_dir, filename), 'wb') as out:
         # Write the response to the output file.
         out.write(speech)
-        logger.info('Audio content written to file "speech.mp3"')
+        logger.info('Audio content written to file %s', filename)
 
-    question['speech'] = 'speech.mp3'
+    question['speech'] = filename
     logger.info('question after speech %s', str(question))
     return question
 
@@ -68,11 +70,17 @@ def call_db(query, qtype='query'):
         return None
 
 
-def sum_scores(response):
-    return 123
+def sum_scores(scores):
+    logger.info('sum_scores: %s', scores)
+    sum = 0
+    for s in scores:
+        sum += s['score']
+    logger.info('sum_scores: %s', sum)
+    return sum
 
 
 def generate_report(patientId, today_score):
+
     pass
 
 
